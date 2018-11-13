@@ -9,7 +9,7 @@
 
 #include "contiki.h"
 #include "net/rime/rime.h"
-
+#include "dev/sht11/sht11-sensor.h"
 #include "dev/button-sensor.h"
 
 #include "dev/leds.h"
