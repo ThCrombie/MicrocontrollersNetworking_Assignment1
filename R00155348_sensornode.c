@@ -36,6 +36,11 @@ PROCESS_THREAD(example_unicast_process, ev, data)
   PROCESS_BEGIN();
 
   unicast_open(&uc, 146, &unicast_callbacks);
+  
+  static int temp;
+  static int counter;
+  static int avg;
+  char stringValue[50];
 
   while(1) {
     static struct etimer et;
@@ -48,15 +53,20 @@ PROCESS_THREAD(example_unicast_process, ev, data)
     PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
 // code from lab 3: this data is sent to the sink (hopefully)
     temp = sht11_sensor.value(SHT11_SENSOR_TEMP);
+    counter = counter + 1;
+    avg = temp / counter;
     
-
-
-    packetbuf_copyfrom("Hello", 5); // this will get changed once i figure out how to send the SHT11 data to 'packetbuf'
+    sprintf(stringValue, "%d", avg);
+    
+    //sends a string: packetbuf_copyfrom("Hello", 6);
+    packetbuf_copyfrom("%s", stringValue); // sends the value as string (hopefully)
     addr.u8[0] = 1;
     addr.u8[1] = 0;
     if(!linkaddr_cmp(&addr, &linkaddr_node_addr)) {
       unicast_send(&uc, &addr);
     }
+  temp = 0;
+  counter = 0;
 
   }
 

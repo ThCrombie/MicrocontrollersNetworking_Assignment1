@@ -77,7 +77,7 @@ PROCESS_THREAD(example_collect_process, ev, data)
       printf("Sending\n");
       packetbuf_clear();
       packetbuf_set_datalen(sprintf(packetbuf_dataptr(),
-				  "%s", "Hello") + 1);
+				  "%s", "Requesting data") + 1);
       collect_send(&tc, 15);
 
       parent = collect_parent(&tc);
